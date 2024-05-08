@@ -4,6 +4,7 @@ package com.tzb.backend.domain;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 

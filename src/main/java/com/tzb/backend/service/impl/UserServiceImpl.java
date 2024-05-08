@@ -2,6 +2,7 @@ package com.tzb.backend.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.tzb.backend.domain.User;
+import com.tzb.backend.dto.LoginDTO;
 import com.tzb.backend.handler.HandlerBuilder;
 import com.tzb.backend.handler.user.UserEncryptPasswordHandler;
 import com.tzb.backend.handler.user.UserExistHandler;
@@ -23,14 +24,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(User user) {
-        User dbUser = userRepository.findByUsername(user.getUsername());
+    public String login(LoginDTO loginDTO) {
+        User dbUser = userRepository.findByUsername(loginDTO.getUsername());
         //责任链模式
         new HandlerBuilder()
                 .addHandler(new UserNotExistHandler(dbUser))
-                .addHandler(new UserPasswordHandler(user,dbUser))
+                .addHandler(new UserPasswordHandler(loginDTO,dbUser))
                 .build();
-        StpUtil.login(user.getPassword());
+        StpUtil.login(loginDTO.getPassword());
         return StpUtil.getTokenValue();
     }
 

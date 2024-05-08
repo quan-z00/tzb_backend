@@ -9,8 +9,8 @@ import com.tzb.backend.core.ResultWrapper;
  * 示例使用：
  * <pre>
  *     {@code
- *     ResultWrapper<Object> successResult = ResultUtil.success(data);
- *     ResultWrapper<Object> failResult = ResultUtil.fail(code, msg);
+ *     ResultWrapper successResult = ResultUtil.success(data);
+ *     ResultWrapper failResult = ResultUtil.fail(code, msg);
  *     }
  * </pre>
  *

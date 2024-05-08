@@ -4,6 +4,7 @@ import cn.dev33.satoken.secure.SaSecureUtil;
 import com.tzb.backend.constant.ExceptionEnum;
 import com.tzb.backend.core.CustomException;
 import com.tzb.backend.domain.User;
+import com.tzb.backend.dto.LoginDTO;
 import com.tzb.backend.handler.Handler;
 
 /**
@@ -12,17 +13,18 @@ import com.tzb.backend.handler.Handler;
  */
 public class UserPasswordHandler implements Handler {
 
-    private final User user;
+    private final LoginDTO loginDTO;
     private final User dbUser;
 
-    public UserPasswordHandler(User user, User dbUser) {
-        this.user = user;
+    public UserPasswordHandler(LoginDTO loginDTO, User dbUser) {
+        this.loginDTO = loginDTO;
         this.dbUser = dbUser;
     }
 
     @Override
     public void process() {
-        if (!SaSecureUtil.sha256(user.getPassword()).equals(dbUser.getPassword())) {
+        if (!SaSecureUtil.sha256(
+                loginDTO.getPassword()).equals(dbUser.getPassword())) {
             throw new CustomException(ExceptionEnum.USER_PASSWORD_ERROR);
         }
     }

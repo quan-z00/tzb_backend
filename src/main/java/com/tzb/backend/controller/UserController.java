@@ -1,8 +1,11 @@
 package com.tzb.backend.controller;
 
 import com.tzb.backend.annotation.ResultWrapper;
+import com.tzb.backend.core.CustomException;
 import com.tzb.backend.domain.User;
+import com.tzb.backend.dto.LoginDTO;
 import com.tzb.backend.service.UserService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,11 +23,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Object login(@RequestBody User user) {
-        return userService.login(user);
+    public Object login(@Validated @RequestBody LoginDTO loginDTO) {
+        return userService.login(loginDTO);
     }
 
     @PostMapping("/register")
+    //TODO LoginDTO
     public Object register(@RequestBody User user) {
         return userService.register(user);
     }
