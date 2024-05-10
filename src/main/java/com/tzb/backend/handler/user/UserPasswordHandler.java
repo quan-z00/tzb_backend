@@ -4,7 +4,7 @@ import cn.dev33.satoken.secure.SaSecureUtil;
 import com.tzb.backend.constant.ExceptionEnum;
 import com.tzb.backend.core.CustomException;
 import com.tzb.backend.domain.User;
-import com.tzb.backend.dto.LoginDTO;
+import com.tzb.backend.dto.user.LoginDTO;
 import com.tzb.backend.handler.Handler;
 
 /**

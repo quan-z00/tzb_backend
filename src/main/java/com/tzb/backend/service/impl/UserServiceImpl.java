@@ -2,7 +2,7 @@ package com.tzb.backend.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.tzb.backend.domain.User;
-import com.tzb.backend.dto.LoginDTO;
+import com.tzb.backend.dto.user.LoginDTO;
 import com.tzb.backend.handler.HandlerBuilder;
 import com.tzb.backend.handler.user.UserEncryptPasswordHandler;
 import com.tzb.backend.handler.user.UserExistHandler;
