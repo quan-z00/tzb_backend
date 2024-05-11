@@ -14,4 +14,5 @@ public class AddUserRolesRequest {
 
     private List<Long> roleIds;
 
+    private Boolean enable;
 }

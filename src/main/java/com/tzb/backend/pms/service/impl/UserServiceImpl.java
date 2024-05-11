@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -226,22 +227,32 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addRoles(Long userId, AddUserRolesRequest request) {
-        userRoleRepository.deleteByUserId(userId);
-        List<UserRole> list = request.getRoleIds().stream()
-                .map(roleId -> {
-                    UserRole userRole = new UserRole();
-                    userRole.setUserId(userId);
-                    userRole.setRoleId(roleId);
-                    return userRole;
-                }).toList();
-        userRoleService.saveBatch(list);
+        if (Objects.nonNull(request.getRoleIds())) {
+            userRoleRepository.deleteByUserId(userId);
+            List<UserRole> list = request.getRoleIds().stream()
+                    .map(roleId -> {
+                        UserRole userRole = new UserRole();
+                        userRole.setUserId(userId);
+                        userRole.setRoleId(roleId);
+                        return userRole;
+                    }).toList();
+            userRoleService.saveBatch(list);
+        }
+        if (Objects.nonNull(request.getEnable())) {
+            User user = new User();
+            user.setEnable(request.getEnable());
+            User dbUser = userRepository.findUserById(userId);
+            CopyUtils.copyProperties(user, dbUser);
+            userRepository.save(dbUser);
+        }
+
     }
 
     @Override
     public void updateProfile(Long id, UpdateProfileRequest request) {
         Profile profile = profileMapper.toProfile(request);
         Profile dbProfile = profileRepository.findByUserId(id);
-        CopyUtils.copyProperties(profile,dbProfile);
+        CopyUtils.copyProperties(profile, dbProfile);
         profileRepository.save(dbProfile);
     }
 
