@@ -1,7 +1,7 @@
-package com.tzb.backend.exhibit.controller;
+package com.tzb.backend.web.controller;
 
 import com.tzb.backend.common.annotation.ResultWrapper;
-import com.tzb.backend.exhibit.service.SpecialExhibitService;
+import com.tzb.backend.web.service.SpecialExhibitService;
 import org.springframework.web.bind.annotation.*;
 
 /**

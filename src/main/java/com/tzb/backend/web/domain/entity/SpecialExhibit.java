@@ -1,6 +1,6 @@
-package com.tzb.backend.exhibit.domain;
+package com.tzb.backend.web.domain.entity;
 
-import com.tzb.backend.exhibit.converter.StringListConverter;
+import com.tzb.backend.web.converter.StringListConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,12 +30,15 @@ public class SpecialExhibit {
 
     private String value; // 文物价值
     private String story; // 文物故事
+    @Column(name = "protection_status")
     private String protectionStatus; // 保护状态
 
 
     @Convert(converter = StringListConverter.class)
+    @Column(name = "exhibition_history")
     private List<String> exhibitionHistory; // 展出历史
     @Convert(converter = StringListConverter.class)
+    @Column(name = "related_artifacts")
     private List<String> relatedArtifacts; // 关联文物
 
 }

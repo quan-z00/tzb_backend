@@ -1,7 +1,6 @@
-package com.tzb.backend.exhibit.repository;
+package com.tzb.backend.web.repository;
 
-import com.tzb.backend.exhibit.domain.SpecialExhibit;
-import com.tzb.backend.exhibit.domain.dto.projection.ArtifactCardProjection;
+import com.tzb.backend.web.domain.entity.SpecialExhibit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +13,5 @@ import java.util.List;
 public interface SpecialExhibitRepository extends JpaRepository<SpecialExhibit, Integer> {
     SpecialExhibit findSpecialExhibitById(int id);
 
-    List<ArtifactCardProjection> findAllBy();
+    List<SpecialExhibit> findAllBy();
 }
