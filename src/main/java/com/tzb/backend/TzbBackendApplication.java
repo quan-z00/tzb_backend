@@ -9,6 +9,7 @@ public class TzbBackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TzbBackendApplication.class, args);
+        System.out.println("hello world");
     }
 
 }
