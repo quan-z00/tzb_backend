@@ -66,6 +66,10 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new CustomException(ExceptionEnum.USER_USERNAME_OR_PASSWORD_ERROR);
         }
+        System.out.println(user.isEnable());
+        if (!user.isEnable()) {
+            throw new CustomException(ExceptionEnum.ROLE_NOT_ROLE_USER);
+        }
         if (StrUtil.isBlank(request.getCaptchaKey())
                 || !captchaService.verify(request.getCaptchaKey(), request.getCaptcha())) {
             throw new CustomException(ExceptionEnum.CAPTCHA_ERROR);
