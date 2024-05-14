@@ -1,22 +1,15 @@
 package com.tzb.backend.pms.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
-
-import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.util.ObjectUtil;
 import com.tzb.backend.common.annotation.ResultWrapper;
 import com.tzb.backend.common.auth.RoleType;
 import com.tzb.backend.common.auth.Roles;
 import com.tzb.backend.common.auth.SaTokenConfigure;
-import com.tzb.backend.pms.domain.dto.PermissionDto;
-import com.tzb.backend.pms.domain.dto.RoleDto;
-import com.tzb.backend.pms.domain.dto.RolePageDto;
 import com.tzb.backend.pms.domain.entity.Role;
 import com.tzb.backend.pms.domain.request.*;
 import com.tzb.backend.pms.mapper.RoleMapper;
 import com.tzb.backend.pms.service.RoleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

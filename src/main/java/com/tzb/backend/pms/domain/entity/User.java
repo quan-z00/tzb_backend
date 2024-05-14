@@ -1,8 +1,6 @@
 package com.tzb.backend.pms.domain.entity;
 
-import cn.dhbin.mapstruct.helper.core.Convert;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +11,8 @@ import java.time.LocalDateTime;
  *
  * @author dhb
  */
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "user")
 public class User {

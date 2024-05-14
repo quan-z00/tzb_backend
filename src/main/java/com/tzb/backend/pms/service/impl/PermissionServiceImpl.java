@@ -2,7 +2,6 @@ package com.tzb.backend.pms.service.impl;
 
 
 import cn.hutool.core.lang.tree.Tree;
-import com.alibaba.fastjson2.JSON;
 import com.tzb.backend.pms.domain.dto.PermissionDto;
 import com.tzb.backend.pms.domain.entity.Permission;
 import com.tzb.backend.pms.domain.entity.RolePermission;

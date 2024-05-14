@@ -1,11 +1,12 @@
 package com.tzb.backend.pms.domain.request;
 
-import cn.dhbin.mapstruct.helper.core.Convert;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
  * 更新权限
+ *
+ * @author : 29002
  */
 @Data
 public class UpdatePermissionRequest {

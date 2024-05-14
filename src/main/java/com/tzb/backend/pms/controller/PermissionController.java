@@ -1,7 +1,6 @@
 package com.tzb.backend.pms.controller;
 
 
-import cn.hutool.core.lang.tree.Tree;
 import com.tzb.backend.common.annotation.ResultWrapper;
 import com.tzb.backend.pms.domain.dto.PermissionDto;
 import com.tzb.backend.pms.domain.entity.Permission;

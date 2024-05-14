@@ -1,7 +1,6 @@
 package com.tzb.backend.pms.domain.dto;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
@@ -9,6 +8,7 @@ import java.util.List;
 
 /**
  * 用户分页数据
+ * @author 29002
  */
 @Data
 @Accessors(chain = true)

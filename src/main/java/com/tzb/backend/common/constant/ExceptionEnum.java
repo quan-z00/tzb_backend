@@ -26,6 +26,9 @@ public enum ExceptionEnum {
     USER_USERNAME_OR_PASSWORD_ERROR("用户名或密码错误", 10002),
     USER_PASSWORD_ERROR("密码错误", 10002),
     USER_NOT_LOGIN("用户未登录", 10004),
+    USER_BANED("用户被禁用", 10005),
+
+    //以上为通用异常(1xxxx)
 
     CAPTCHA_ERROR("验证码错误", 10003),
     CAPTCHA_FAILED("密码验证失败", 10004),
@@ -39,8 +42,8 @@ public enum ExceptionEnum {
     ROLE_NOT_ROLE("越权操作", 40006),
     ROLE_NOT_ROLE_USER("您目前暂无此角色或已被禁用，请联系管理员", 40007),
     NOT_DELETE_ROOT_ROLE("不能删除根角色", 40008),
-
-
+    //以上为后台角色权限相关异常(1xxxx,4xxxx)
+    //以上为前台用户相关异常(2xxxx)
     ILLEGAL_OPERATION("非法操作", 9999),
     ;
 

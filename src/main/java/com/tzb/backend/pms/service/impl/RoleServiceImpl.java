@@ -5,7 +5,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson2.JSON;
 import com.tzb.backend.common.auth.PmsConstant;
 import com.tzb.backend.common.auth.RoleType;
 import com.tzb.backend.common.constant.ExceptionEnum;
@@ -52,8 +51,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> findRolesByUserId(Long userId) {
         List<UserRole> userRoles = userRoleRepository.findAllByUserId(userId);
-        List<Role> roles = userRoles.stream().map(userRole -> roleRepository.getRoleById(userRole.getRoleId())).toList();
-        return roles;
+        return userRoles.stream().map(userRole -> roleRepository.getRoleById(userRole.getRoleId())).toList();
     }
 
     @Override
