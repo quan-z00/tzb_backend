@@ -71,6 +71,7 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <!-- MapStruct框架，用于简化Java对象之间的映射转换 -->
+        <!-- MapStruct注解处理器，用于在编译时生成映射转换的实现代码 -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
@@ -84,12 +85,6 @@
             <version>1.0.0</version>
         </dependency>
 
-        <!-- MapStruct注解处理器，用于在编译时生成映射转换的实现代码 -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>1.5.5.Final</version>
-        </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
