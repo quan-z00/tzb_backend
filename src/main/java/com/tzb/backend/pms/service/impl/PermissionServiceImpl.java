@@ -2,6 +2,7 @@ package com.tzb.backend.pms.service.impl;
 
 
 import cn.hutool.core.lang.tree.Tree;
+import com.tzb.backend.common.utils.CopyUtils;
 import com.tzb.backend.pms.domain.dto.PermissionDto;
 import com.tzb.backend.pms.domain.entity.Permission;
 import com.tzb.backend.pms.domain.entity.RolePermission;
@@ -57,7 +58,7 @@ public class PermissionServiceImpl implements PermissionService {
     public List<PermissionDto> findAllMenu() {
         return permissionRepository.findAllByType(TYPE_MENU)
                 .stream()
-                .map(permission -> permission.convert(PermissionDto.class))
+                .map(permissionMapper::toPermissionDto)
                 .toList();
     }
 
@@ -89,7 +90,9 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public void updateById(Permission permission) {
-        permissionRepository.save(permission);
+        Permission dbPermission = permissionRepository.findAllById(permission.getId());
+        CopyUtils.copyProperties(permission, dbPermission);
+        permissionRepository.save(dbPermission);
     }
 
     @Override

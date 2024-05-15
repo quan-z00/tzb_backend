@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface PermissionRepository extends JpaRepository<Permission,Long> {
 
-    List<Permission> findAllById(Long id);
+    Permission findAllById(Long id);
 
     List<Permission> findAllByType(String type);
 

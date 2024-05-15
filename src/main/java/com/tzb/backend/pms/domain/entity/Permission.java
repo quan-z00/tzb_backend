@@ -1,6 +1,5 @@
 package com.tzb.backend.pms.domain.entity;
 
-import cn.dhbin.mapstruct.helper.core.Convert;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "permission")
-public class Permission implements Convert {
+public class Permission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,7 +2,6 @@ package com.tzb.backend.pms.controller;
 
 
 import com.tzb.backend.common.annotation.ResultWrapper;
-import com.tzb.backend.pms.domain.dto.PermissionDto;
 import com.tzb.backend.pms.domain.entity.Permission;
 import com.tzb.backend.pms.domain.request.CreatePermissionRequest;
 import com.tzb.backend.pms.domain.request.UpdatePermissionRequest;
@@ -78,7 +77,7 @@ public class PermissionController {
      */
     @GetMapping("{id}")
     public Object findOne(@PathVariable Long id) {
-        return permissionService.getById(id).convert(PermissionDto.class);
+        return permissionMapper.toPermissionDto(permissionService.getById(id));
     }
 
     /**
@@ -114,7 +113,7 @@ public class PermissionController {
     @GetMapping("/button/{parentId}")
     public Object findButtonAndApi(@PathVariable Long parentId) {
         return permissionService.findButton(parentId)
-                .stream().map(permission -> permission.convert(PermissionDto.class))
+                .stream().map(permissionMapper::toPermissionDto)
                 .toList();
     }
 
