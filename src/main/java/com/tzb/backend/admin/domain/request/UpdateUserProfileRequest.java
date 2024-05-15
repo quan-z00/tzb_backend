@@ -1,6 +1,5 @@
 package com.tzb.backend.admin.domain.request;
 
-import com.tzb.backend.admin.enums.Gender;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -17,7 +16,7 @@ public class UpdateUserProfileRequest {
     private String signature;
     private String location;
     private String avatar;
-    private Gender gender;
+    private Boolean gender;
     private LocalDate birthday;
     private LocalDateTime updatedAt;
 

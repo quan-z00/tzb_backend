@@ -13,4 +13,6 @@ import lombok.EqualsAndHashCode;
 public class UserPageRequest extends MyPageRequest {
     private String username;
     private String email;
+    private Boolean enable;
+    private Integer type;
 }

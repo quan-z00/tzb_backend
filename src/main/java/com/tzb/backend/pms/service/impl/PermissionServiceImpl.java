@@ -64,7 +64,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<Tree<Long>> findAllMenuTree() {
-        List<Permission> permissions = permissionRepository.findAllByTypeOrderByOrderAsc(TYPE_MENU);
+        List<Permission> permissions = permissionRepository.findAllByTypeAndEnableOrderByOrderAsc(TYPE_MENU, true);
         return PermissionUtil.toTreeNode(permissions, null);
     }
 
@@ -96,6 +96,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void removeById(Long id) {
         permissionRepository.deletePermissionById(id);
     }

@@ -1,12 +1,11 @@
 package com.tzb.backend.admin.controller;
 
 import cn.dev33.satoken.annotation.SaIgnore;
-import com.tzb.backend.admin.domain.request.LoginRequest;
-import com.tzb.backend.admin.domain.request.RegisterRequest;
-import com.tzb.backend.admin.domain.request.UpdateUserProfileRequest;
-import com.tzb.backend.admin.domain.request.UserPageRequest;
+import com.tzb.backend.admin.domain.request.*;
 import com.tzb.backend.admin.service.UserService;
 import com.tzb.backend.common.annotation.ResultWrapper;
+import com.tzb.backend.common.auth.RoleType;
+import com.tzb.backend.common.auth.Roles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +22,17 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping
-    public Object getUsers(@RequestBody UserPageRequest request) {
+    @GetMapping
+    public Object getUsers(UserPageRequest request) {
         return userService.getPage(request);
+    }
+
+    //切换状态
+    @Roles({RoleType.SUPER_ADMIN})
+    @PatchMapping("/update/status/{id}")
+    public Object updateUserStatus(@PathVariable("id") Integer userId, @RequestBody UpdateUserStatusRequest request) {
+        userService.updateUserStatus(userId, request);
+        return null;
     }
 
     @PostMapping("/update")

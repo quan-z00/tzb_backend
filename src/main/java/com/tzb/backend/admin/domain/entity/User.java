@@ -1,8 +1,6 @@
 package com.tzb.backend.admin.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.tzb.backend.admin.enums.UserLevel;
-import com.tzb.backend.admin.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,11 +31,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Enumerated(EnumType.ORDINAL)
-    private UserStatus status = UserStatus.ACTIVE;
+    private Boolean enable = true;
 
-    @Enumerated(EnumType.ORDINAL)
-    private UserLevel role = UserLevel.PUBLIC;
+    private Integer type = 0;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

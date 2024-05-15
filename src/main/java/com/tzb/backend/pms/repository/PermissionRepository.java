@@ -20,6 +20,8 @@ public interface PermissionRepository extends JpaRepository<Permission,Long> {
 
     List<Permission> findAllByTypeOrderByOrderAsc(String type);
 
+    List<Permission> findAllByTypeAndEnableOrderByOrderAsc(String type, Boolean enable);
+
     List<Permission> findAllByParentIdAndTypeInOrderByOrderAsc(Long parentId, List<String> types);
 
     boolean existsByPath(String path);

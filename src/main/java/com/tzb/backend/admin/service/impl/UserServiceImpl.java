@@ -5,11 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.tzb.backend.admin.domain.dto.UserPageDto;
 import com.tzb.backend.admin.domain.entity.Profile;
 import com.tzb.backend.admin.domain.entity.User;
-import com.tzb.backend.admin.domain.request.LoginRequest;
-import com.tzb.backend.admin.domain.request.RegisterRequest;
-import com.tzb.backend.admin.domain.request.UpdateUserProfileRequest;
-import com.tzb.backend.admin.domain.request.UserPageRequest;
-import com.tzb.backend.admin.enums.UserStatus;
+import com.tzb.backend.admin.domain.request.*;
 import com.tzb.backend.admin.mapper.FProfileMapper;
 import com.tzb.backend.admin.mapper.FUserMapper;
 import com.tzb.backend.admin.repository.ProfileRepository;
@@ -18,6 +14,7 @@ import com.tzb.backend.admin.repository.UserSpecifications;
 import com.tzb.backend.admin.service.UserService;
 import com.tzb.backend.common.constant.ExceptionEnum;
 import com.tzb.backend.common.core.CustomException;
+import com.tzb.backend.common.core.PageResponse;
 import com.tzb.backend.common.utils.CopyUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -42,14 +39,21 @@ public class UserServiceImpl implements UserService {
     private final ProfileRepository profileRepository;
 
     @Override
-    public List<UserPageDto> getPage(UserPageRequest userPageRequest) {
+    public PageResponse getPage(UserPageRequest userPageRequest) {
         Pageable pageable = userPageRequest.toPageable();
 
-        Specification<User> spec = userSpecifications.searchUsers(userPageRequest.getUsername(), userPageRequest.getEmail());
+        String username = userPageRequest.getUsername();
+        String email = userPageRequest.getEmail();
+        Boolean enable = userPageRequest.getEnable();
+        Integer type = userPageRequest.getType();
 
+        Specification<User> spec = userSpecifications.searchUsers(username, email, enable, type);
 
         Page<User> userPage = userRepository.findAll(spec, pageable);
-        return userPage.getContent().stream().map(userMapper::toUserPageDto).toList();
+        List<UserPageDto> userPageDtoList = userPage.getContent().stream().map(userMapper::toUserPageDto).toList();
+        long total = userRepository.count(spec);
+
+        return new PageResponse(userPageDtoList, total);
     }
 
     @Override
@@ -73,7 +77,7 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(ExceptionEnum.USER_USERNAME_OR_PASSWORD_ERROR);
         }
 
-        if (dbUser.getStatus() == UserStatus.DISABLED) {
+        if (!dbUser.getEnable()) {
             throw new CustomException(ExceptionEnum.USER_BANED);
         }
         StpUtil.login(dbUser.getUsername());
@@ -83,7 +87,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String register(RegisterRequest request) {
-        Specification<User> specification = userSpecifications.searchUsers(request.getUsername(), request.getEmail());
+        Specification<User> specification = userSpecifications.searchRequestUsers(request.getUsername(), request.getEmail());
         List<User> dbUserList = userRepository.findAll(specification);
         if (!dbUserList.isEmpty()) {
             throw new CustomException(ExceptionEnum.USER_EXIST);
@@ -96,5 +100,13 @@ public class UserServiceImpl implements UserService {
         profileRepository.save(profile);
         StpUtil.login(saved.getUsername());
         return StpUtil.getTokenValue();
+    }
+
+    @Override
+    public void updateUserStatus(Integer userId, UpdateUserStatusRequest request) {
+        User dbUser = userRepository.findUserById(userId);
+        User user = userMapper.toUser(request);
+        CopyUtils.copyProperties(user, dbUser);
+        userRepository.save(dbUser);
     }
 }

@@ -1,8 +1,7 @@
 package com.tzb.backend.admin.domain.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.tzb.backend.admin.enums.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +24,7 @@ public class Profile {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+    @JsonIgnore
     private User user;
 
     @Column
@@ -35,8 +34,7 @@ public class Profile {
 
     private String nickname;
 
-    @Enumerated(EnumType.ORDINAL)
-    private Gender gender = Gender.OTHER;
+    private Boolean gender = null;
 
     private LocalDate birthday;
 
@@ -49,4 +47,7 @@ public class Profile {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
+    public Profile() {
+        this.nickname = "用户" + (int) (Math.random() * 10000);
+    }
 }

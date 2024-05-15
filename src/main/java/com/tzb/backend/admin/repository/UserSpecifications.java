@@ -16,6 +16,10 @@ import java.util.List;
 public class UserSpecifications {
 
     public Specification<User> searchUsers(String username, String email) {
+        return searchUsers(username, email, null, null);
+    }
+
+    public Specification<User> searchUsers(String username, String email, Boolean enable, Integer type) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -25,8 +29,21 @@ public class UserSpecifications {
             if (StringUtils.hasText(email)) {
                 predicates.add(criteriaBuilder.equal(root.get("email"), email));
             }
+            if (enable != null) {
+                predicates.add(criteriaBuilder.equal(root.get("enable"), enable));
+            }
+            if (type != null) {
+                predicates.add(criteriaBuilder.equal(root.get("type"), type));
+            }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
+    }
+
+
+    public Specification<User> searchRequestUsers(String username, String email) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.or(
+                criteriaBuilder.equal(root.get("username"), username),
+                criteriaBuilder.equal(root.get("email"), email));
     }
 }

@@ -18,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     User findByUsername(String username);
 
     User findUserById(Integer id);
+
+    int countAllBy();
 }

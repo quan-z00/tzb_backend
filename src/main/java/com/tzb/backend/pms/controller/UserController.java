@@ -74,6 +74,7 @@ public class UserController {
      *
      * @return R
      */
+    @Roles({RoleType.SUPER_ADMIN})
     @PatchMapping("{id}")
     public Object update(@PathVariable Long id, @RequestBody AddUserRolesRequest request) {
         userService.addRoles(id, request);
@@ -142,6 +143,7 @@ public class UserController {
      * @param userId 用户id
      * @return R
      */
+    @Roles({RoleType.SUPER_ADMIN})
     @PostMapping("/roles/add/{userId}")
     public Object addRoles(@PathVariable Long userId, @RequestBody @Validated AddUserRolesRequest request) {
         userService.addRoles(userId, request);

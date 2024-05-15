@@ -1,9 +1,9 @@
 package com.tzb.backend.admin.domain.dto;
 
-import com.tzb.backend.admin.domain.entity.Profile;
-import com.tzb.backend.admin.enums.UserLevel;
-import com.tzb.backend.admin.enums.UserStatus;
 import lombok.Data;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author 29002
@@ -14,7 +14,12 @@ public class UserPageDto {
     private Integer id;
     private String username;
     private Integer score;
-    private UserStatus status;
-    private UserLevel role;
-    private Profile profile;
+    private Boolean enable;
+    private Integer type;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDate birthday;
+    private String email;
+    private Boolean gender;
+    private String nickname;
 }
