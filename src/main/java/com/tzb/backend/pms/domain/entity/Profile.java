@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 /**
  * 用户信息
  *
@@ -38,4 +40,16 @@ public class Profile {
     @JoinColumn(name = "userId",insertable=false, updatable=false)
     private User user;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Profile profile = (Profile) o;
+        return Objects.equals(id, profile.id) && Objects.equals(gender, profile.gender) && Objects.equals(avatar, profile.avatar) && Objects.equals(address, profile.address) && Objects.equals(email, profile.email) && Objects.equals(userId, profile.userId) && Objects.equals(nickName, profile.nickName) && Objects.equals(user, profile.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, gender, avatar, address, email, userId, nickName, user);
+    }
 }

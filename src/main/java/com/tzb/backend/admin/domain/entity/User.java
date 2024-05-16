@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * @author 29002
@@ -45,4 +46,16 @@ public class User {
     @JsonManagedReference
     private Profile profile;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(score, user.score) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && Objects.equals(enable, user.enable) && Objects.equals(type, user.type) && Objects.equals(createdAt, user.createdAt) && Objects.equals(updatedAt, user.updatedAt) && Objects.equals(profile, user.profile);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, score, password, email, enable, type, createdAt, updatedAt, profile);
+    }
 }

@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * @author 29002
@@ -49,5 +50,18 @@ public class Profile {
 
     public Profile() {
         this.nickname = "用户" + (int) (Math.random() * 10000);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Profile profile = (Profile) o;
+        return Objects.equals(id, profile.id) && Objects.equals(user, profile.user) && Objects.equals(avatar, profile.avatar) && Objects.equals(signature, profile.signature) && Objects.equals(nickname, profile.nickname) && Objects.equals(gender, profile.gender) && Objects.equals(birthday, profile.birthday) && Objects.equals(location, profile.location) && Objects.equals(createdAt, profile.createdAt) && Objects.equals(updatedAt, profile.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, user, avatar, signature, nickname, gender, birthday, location, createdAt, updatedAt);
     }
 }
