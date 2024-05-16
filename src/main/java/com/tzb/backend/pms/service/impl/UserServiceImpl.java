@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
             // 查询用户的角色
             List<Role> roles = roleService.findRolesByUserId(user.getId());
 
-            return generateToken(user, roles, roles.isEmpty() ? "" : roles.getFirst().getCode());
+            return generateToken(user, roles, roles.isEmpty() ? "" : roles.get(0).getCode());
         } else {
             throw new CustomException(ExceptionEnum.USER_USERNAME_OR_PASSWORD_ERROR);
         }
