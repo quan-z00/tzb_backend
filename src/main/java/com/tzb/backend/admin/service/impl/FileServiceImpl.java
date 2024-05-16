@@ -17,6 +17,10 @@ import java.nio.file.Files;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * @author 29002
+ * @since 2024/5/15
+ */
 @Service
 public class FileServiceImpl implements FileService {
 
@@ -26,15 +30,17 @@ public class FileServiceImpl implements FileService {
     @SuppressWarnings("all")
     @Override
     public String uploadImage(MultipartFile multipartFile, HttpServletRequest request) throws IOException {
-
-        File dir = new File(uploadPath);
+        // 确定相对路径
+        File dir = new File(System.getProperty("user.dir"), uploadPath);
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        String originalFileName = Objects.requireNonNull(multipartFile.getOriginalFilename()).split("\\.")[1];
-        String newFileName = UUID.randomUUID() + "." + originalFileName;
 
-        File newFile = new File(uploadPath + "/" + newFileName);
+        String originalFileName = Objects.requireNonNull(multipartFile.getOriginalFilename());
+        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf('.') + 1);
+        String newFileName = UUID.randomUUID() + "." + fileExtension;
+
+        File newFile = new File(dir, newFileName);
 
         multipartFile.transferTo(newFile);
         return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/img/" + newFileName;
@@ -42,8 +48,8 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Object loadImage(String fileName, HttpServletRequest request) throws IOException {
-        String suffix = fileName.split("\\.")[1];
-        File file = new File(uploadPath + "/" + fileName);
+        String suffix = fileName.substring(fileName.lastIndexOf('.') + 1);
+        File file = new File(System.getProperty("user.dir") + "/" + uploadPath, fileName);
         HttpHeaders headers = new HttpHeaders();
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(file.toPath()));
         headers.setContentType(getMediaType(suffix));
