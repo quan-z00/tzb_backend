@@ -2,7 +2,6 @@ package com.tzb.backend.pms.domain.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +10,8 @@ import lombok.Setter;
  *
  * @author dhb
  */
-@Data
+@Getter
+@Setter
 @Entity(name = "role_permissions_permission")
 public class RolePermission {
 

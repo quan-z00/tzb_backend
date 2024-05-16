@@ -5,10 +5,12 @@ import com.tzb.backend.pms.domain.dto.UserPageDto;
 import com.tzb.backend.pms.domain.entity.User;
 import com.tzb.backend.pms.domain.request.RegisterUserRequest;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
 
 import static com.tzb.backend.common.mapstruct.MapstructConstant.DEFAULT_COMPONENT_MODEL;
 
+/**
+ * @author 29002
+ */
 @Mapper(componentModel = DEFAULT_COMPONENT_MODEL)
 public interface UserMapper {
     UserDetailDto toUserDetailDto(User user);

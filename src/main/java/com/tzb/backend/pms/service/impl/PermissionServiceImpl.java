@@ -2,7 +2,7 @@ package com.tzb.backend.pms.service.impl;
 
 
 import cn.hutool.core.lang.tree.Tree;
-import com.alibaba.fastjson2.JSON;
+import com.tzb.backend.common.utils.CopyUtils;
 import com.tzb.backend.pms.domain.dto.PermissionDto;
 import com.tzb.backend.pms.domain.entity.Permission;
 import com.tzb.backend.pms.domain.entity.RolePermission;
@@ -58,13 +58,13 @@ public class PermissionServiceImpl implements PermissionService {
     public List<PermissionDto> findAllMenu() {
         return permissionRepository.findAllByType(TYPE_MENU)
                 .stream()
-                .map(permission -> permission.convert(PermissionDto.class))
+                .map(permissionMapper::toPermissionDto)
                 .toList();
     }
 
     @Override
     public List<Tree<Long>> findAllMenuTree() {
-        List<Permission> permissions = permissionRepository.findAllByTypeOrderByOrderAsc(TYPE_MENU);
+        List<Permission> permissions = permissionRepository.findAllByTypeAndEnableOrderByOrderAsc(TYPE_MENU, true);
         return PermissionUtil.toTreeNode(permissions, null);
     }
 
@@ -90,10 +90,13 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public void updateById(Permission permission) {
-        permissionRepository.save(permission);
+        Permission dbPermission = permissionRepository.findAllById(permission.getId());
+        CopyUtils.copyProperties(permission, dbPermission);
+        permissionRepository.save(dbPermission);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void removeById(Long id) {
         permissionRepository.deletePermissionById(id);
     }

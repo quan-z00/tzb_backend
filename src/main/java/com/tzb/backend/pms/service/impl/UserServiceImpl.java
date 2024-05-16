@@ -4,10 +4,8 @@ import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
-import com.alibaba.fastjson2.JSON;
 import com.tzb.backend.common.auth.SaTokenConfigure;
 import com.tzb.backend.common.constant.ExceptionEnum;
 import com.tzb.backend.common.core.CustomException;
@@ -22,12 +20,10 @@ import com.tzb.backend.pms.mapper.ProfileMapper;
 import com.tzb.backend.pms.mapper.RoleMapper;
 import com.tzb.backend.pms.mapper.UserMapper;
 import com.tzb.backend.pms.repository.ProfileRepository;
-import com.tzb.backend.pms.repository.RoleRepository;
+import com.tzb.backend.pms.repository.UserRepository;
 import com.tzb.backend.pms.repository.UserRoleRepository;
 import com.tzb.backend.pms.service.*;
-import com.tzb.backend.pms.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -65,6 +61,10 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(request.getUsername());
         if (user == null) {
             throw new CustomException(ExceptionEnum.USER_USERNAME_OR_PASSWORD_ERROR);
+        }
+        System.out.println(user.isEnable());
+        if (!user.isEnable()) {
+            throw new CustomException(ExceptionEnum.ROLE_NOT_ROLE_USER);
         }
         if (StrUtil.isBlank(request.getCaptchaKey())
                 || !captchaService.verify(request.getCaptchaKey(), request.getCaptcha())) {

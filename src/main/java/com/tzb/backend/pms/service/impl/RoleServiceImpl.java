@@ -5,7 +5,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson2.JSON;
 import com.tzb.backend.common.auth.PmsConstant;
 import com.tzb.backend.common.auth.RoleType;
 import com.tzb.backend.common.constant.ExceptionEnum;
@@ -17,6 +16,7 @@ import com.tzb.backend.pms.domain.entity.Role;
 import com.tzb.backend.pms.domain.entity.RolePermission;
 import com.tzb.backend.pms.domain.entity.UserRole;
 import com.tzb.backend.pms.domain.request.*;
+import com.tzb.backend.pms.mapper.PermissionMapper;
 import com.tzb.backend.pms.mapper.RoleMapper;
 import com.tzb.backend.pms.repository.RoleRepository;
 import com.tzb.backend.pms.repository.UserRoleRepository;
@@ -47,13 +47,13 @@ public class RoleServiceImpl implements RoleService {
     private final UserRoleService userRoleService;
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
+    private final PermissionMapper permissionMapper;
     private final UserRoleRepository userRoleRepository;
 
     @Override
     public List<Role> findRolesByUserId(Long userId) {
         List<UserRole> userRoles = userRoleRepository.findAllByUserId(userId);
-        List<Role> roles = userRoles.stream().map(userRole -> roleRepository.getRoleById(userRole.getRoleId())).toList();
-        return roles;
+        return userRoles.stream().map(userRole -> roleRepository.getRoleById(userRole.getRoleId())).toList();
     }
 
     @Override
@@ -118,7 +118,7 @@ public class RoleServiceImpl implements RoleService {
     public List<PermissionDto> findRolePermissions(Long id) {
         return permissionService.findByRoleId(id)
                 .stream()
-                .map(permission -> permission.convert(PermissionDto.class))
+                .map(permissionMapper::toPermissionDto)
                 .toList();
     }
 

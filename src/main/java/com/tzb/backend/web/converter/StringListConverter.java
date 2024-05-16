@@ -1,10 +1,10 @@
 package com.tzb.backend.web.converter;
 
-import java.util.List;
-
 import com.alibaba.fastjson2.JSON;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+
+import java.util.List;
 
 /**
  * 字符串列表转换器，用于将字符串列表转换为数据库字段存储，并在从数据库中读取时将其转换为列表对象。

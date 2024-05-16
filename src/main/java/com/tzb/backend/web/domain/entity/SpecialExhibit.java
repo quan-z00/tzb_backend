@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name = "cultural_manage")
+@Table(name = "special_exhibits")
 public class SpecialExhibit {
     @Id
     private int id; // 文物ID

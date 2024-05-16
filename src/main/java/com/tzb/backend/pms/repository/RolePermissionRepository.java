@@ -3,7 +3,6 @@ package com.tzb.backend.pms.repository;
 
 import com.tzb.backend.pms.domain.entity.RolePermission;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 

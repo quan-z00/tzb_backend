@@ -5,7 +5,6 @@ import com.tzb.backend.pms.domain.entity.RolePermission;
 import com.tzb.backend.pms.repository.RolePermissionRepository;
 import com.tzb.backend.pms.service.RolePermissionService;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.ObjectFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

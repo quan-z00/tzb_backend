@@ -4,6 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * 标识角色权限
+ * @author 29002
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
