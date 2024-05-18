@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 权限服务类的实现类，主要负责权限相关的处理
@@ -37,7 +38,10 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<Permission> findByRoleId(Long roleId) {
         List<RolePermission> rolePermissions = rolePermissionRepository.findAllByRoleId(roleId);
-        return rolePermissions.stream().map(rolePermission -> permissionRepository.findById(rolePermission.getPermissionId()).orElse(null)).toList();
+        return rolePermissions.stream()
+                .map(rolePermission -> permissionRepository.findById(rolePermission.getPermissionId()).orElse(null))
+                .filter(o -> Objects.nonNull(o) && o.getEnable())
+                .toList();
     }
 
     @Override
@@ -64,7 +68,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<Tree<Long>> findAllMenuTree() {
-        List<Permission> permissions = permissionRepository.findAllByTypeAndEnableOrderByOrderAsc(TYPE_MENU, true);
+        List<Permission> permissions = permissionRepository.findAllByTypeOrderByOrderAsc(TYPE_MENU);
         return PermissionUtil.toTreeNode(permissions, null);
     }
 
