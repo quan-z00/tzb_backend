@@ -1,4 +1,4 @@
-package com.tzb.backend.admin.repository;
+package com.tzb.backend.admin.repository.spc;
 
 import com.tzb.backend.admin.domain.entity.User;
 import jakarta.persistence.criteria.Predicate;

@@ -1,6 +1,6 @@
 package com.tzb.backend.web.domain.entity;
 
-import com.tzb.backend.web.converter.StringListConverter;
+import com.tzb.backend.common.converter.StringListConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

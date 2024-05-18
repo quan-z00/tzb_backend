@@ -3,6 +3,7 @@ package com.tzb.backend.common.request;
 import lombok.Data;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 /**
  * 分页请求
@@ -27,5 +28,9 @@ public class MyPageRequest {
      */
     public Pageable toPageable() {
         return PageRequest.of(pageNo - 1, pageSize);
+    }
+
+    public Pageable toPageable(Sort sort) {
+        return PageRequest.of(pageNo - 1, pageSize, sort);
     }
 }

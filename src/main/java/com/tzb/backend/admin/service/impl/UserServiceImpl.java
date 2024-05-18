@@ -10,7 +10,7 @@ import com.tzb.backend.admin.mapper.FProfileMapper;
 import com.tzb.backend.admin.mapper.FUserMapper;
 import com.tzb.backend.admin.repository.ProfileRepository;
 import com.tzb.backend.admin.repository.UserRepository;
-import com.tzb.backend.admin.repository.UserSpecifications;
+import com.tzb.backend.admin.repository.spc.UserSpecifications;
 import com.tzb.backend.admin.service.UserService;
 import com.tzb.backend.common.constant.ExceptionEnum;
 import com.tzb.backend.common.core.CustomException;
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UpdateUserProfileRequest updateUserProfileRequest) {
-        Profile dbProfile = profileRepository.findByUserId(updateUserProfileRequest.getUserId());
+        Profile dbProfile = profileRepository.findByUser_Id(updateUserProfileRequest.getUserId());
         Profile profile = profileMapper.toProfile(updateUserProfileRequest);
         CopyUtils.copyProperties(profile, dbProfile);
         profileRepository.save(dbProfile);

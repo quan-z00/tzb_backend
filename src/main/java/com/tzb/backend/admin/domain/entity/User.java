@@ -24,7 +24,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    private Integer score = 0;
+    private Integer score;
 
     @Column(nullable = false)
     private String password;
@@ -32,9 +32,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    private Boolean enable = true;
+    private Boolean enable;
 
-    private Integer type = 0;
+    private Integer type;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -51,11 +51,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(score, user.score) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && Objects.equals(enable, user.enable) && Objects.equals(type, user.type) && Objects.equals(createdAt, user.createdAt) && Objects.equals(updatedAt, user.updatedAt) && Objects.equals(profile, user.profile);
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(score, user.score) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && Objects.equals(enable, user.enable) && Objects.equals(type, user.type) && Objects.equals(createdAt, user.createdAt) && Objects.equals(updatedAt, user.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, score, password, email, enable, type, createdAt, updatedAt, profile);
+        return Objects.hash(id, username, score, password, email, enable, type, createdAt, updatedAt);
     }
 }
