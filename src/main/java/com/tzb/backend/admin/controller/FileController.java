@@ -1,5 +1,6 @@
 package com.tzb.backend.admin.controller;
 
+import cn.dev33.satoken.annotation.SaIgnore;
 import com.tzb.backend.admin.service.FileService;
 import com.tzb.backend.common.annotation.ExcludeResultWrapper;
 import com.tzb.backend.common.annotation.ResultWrapper;
@@ -23,11 +24,13 @@ public class FileController {
     private final FileService fileService;
 
 
+    @SaIgnore
     @PutMapping("/file/img")
     public Object upload(@RequestAttribute MultipartFile file, HttpServletRequest request) throws IOException {
         return fileService.uploadImage(file, request);
     }
 
+    @SaIgnore
     @PutMapping("/file/imgs")
     public Object upload(@RequestAttribute MultipartFile[] files, HttpServletRequest request) {
         //TODO 待优化

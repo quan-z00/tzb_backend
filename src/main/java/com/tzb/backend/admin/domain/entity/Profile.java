@@ -1,6 +1,7 @@
 package com.tzb.backend.admin.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,8 +26,12 @@ public class Profile {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     @JsonIgnore
     private User user;
+
+    @Transient
+    private Integer userId;
 
     @Column
     private String avatar;
@@ -35,7 +40,7 @@ public class Profile {
 
     private String nickname;
 
-    private Boolean gender = null;
+    private Boolean gender;
 
     private LocalDate birthday;
 
@@ -52,16 +57,23 @@ public class Profile {
         this.nickname = "用户" + (int) (Math.random() * 10000);
     }
 
+    @PostLoad
+    private void onLoad() {
+        if (user != null) {
+            this.userId = user.getId();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Profile profile = (Profile) o;
-        return Objects.equals(id, profile.id) && Objects.equals(user, profile.user) && Objects.equals(avatar, profile.avatar) && Objects.equals(signature, profile.signature) && Objects.equals(nickname, profile.nickname) && Objects.equals(gender, profile.gender) && Objects.equals(birthday, profile.birthday) && Objects.equals(location, profile.location) && Objects.equals(createdAt, profile.createdAt) && Objects.equals(updatedAt, profile.updatedAt);
+        return Objects.equals(id, profile.id) && Objects.equals(avatar, profile.avatar) && Objects.equals(signature, profile.signature) && Objects.equals(nickname, profile.nickname) && Objects.equals(gender, profile.gender) && Objects.equals(birthday, profile.birthday) && Objects.equals(location, profile.location) && Objects.equals(createdAt, profile.createdAt) && Objects.equals(updatedAt, profile.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, avatar, signature, nickname, gender, birthday, location, createdAt, updatedAt);
+        return Objects.hash(id, avatar, signature, nickname, gender, birthday, location, createdAt, updatedAt);
     }
 }

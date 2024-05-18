@@ -1,4 +1,4 @@
-package com.tzb.backend.web.converter;
+package com.tzb.backend.common.converter;
 
 import com.alibaba.fastjson2.JSON;
 import jakarta.persistence.AttributeConverter;

@@ -1,7 +1,6 @@
 package com.tzb.backend.admin.domain.entity;
 
 
-import com.tzb.backend.admin.enums.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,17 +32,18 @@ public class Post {
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
+
     @Column
     private String tags;
 
-    @Enumerated(EnumType.STRING)
-    private Status status = Status.PENDING;
+    // 1: 已发布 2:已删除 3:审核中 4:审核失败
+    private Integer status;
 
     @Column
-    private int views = 0;
+    private int views;
 
     @Column
-    private int likes = 0;
+    private int likes;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -56,7 +56,7 @@ public class Post {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return views == post.views && likes == post.likes && Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(content, post.content) && Objects.equals(author, post.author) && Objects.equals(tags, post.tags) && status == post.status && Objects.equals(createdAt, post.createdAt) && Objects.equals(updatedAt, post.updatedAt);
+        return views == post.views && likes == post.likes && Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(content, post.content) && Objects.equals(author, post.author) && Objects.equals(tags, post.tags) && Objects.equals(status, post.status) && Objects.equals(createdAt, post.createdAt) && Objects.equals(updatedAt, post.updatedAt);
     }
 
     @Override
