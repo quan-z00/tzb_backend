@@ -24,19 +24,21 @@ DROP TABLE IF EXISTS `comments`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comments`
 (
-    `id`         int  NOT NULL AUTO_INCREMENT,
-    `post_id`    int  NOT NULL,
-    `user_id`    int  NOT NULL,
-    `content`    text NOT NULL,
-    `status`     enum('pending','approved','rejected') DEFAULT 'pending',
-    `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `id`         int  NOT NULL AUTO_INCREMENT COMMENT '评论ID',
+    `father_id`  int           DEFAULT NULL COMMENT '父评论ID',
+    `post_id`    int  NOT NULL COMMENT '帖子ID',
+    `user_id`    int  NOT NULL COMMENT '用户ID',
+    `reply_id`   int           DEFAULT NULL COMMENT '回复者ID',
+    `content`    text NOT NULL COMMENT '评论内容',
+    `status`     int  NOT NULL DEFAULT '0' COMMENT '审核状态',
+    `created_at` datetime      DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` datetime      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
     KEY          `post_id` (`post_id`),
-    KEY          `comments_ibfk_2` (`user_id`),
+    KEY          `user_id` (`user_id`),
     CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`),
-    CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `frontend_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+    CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `frontend_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='评论表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,6 +48,10 @@ CREATE TABLE `comments`
 LOCK
 TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+INSERT INTO `comments`
+VALUES (1, NULL, 1, 1, NULL, '我是消息1', 1, '2024-05-16 18:18:57', '2024-05-16 18:18:57'),
+       (2, 1, 1, 4, 1, '我是消息2,回复消息1', 1, '2024-05-16 18:18:57', '2024-05-16 18:20:26'),
+       (3, 2, 1, 1, 4, '我是消息3,回复消息2', 1, '2024-05-16 18:18:57', '2024-05-16 18:20:26');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK
 TABLES;
@@ -113,7 +119,7 @@ CREATE TABLE `frontend_user`
     `password`   varchar(255) NOT NULL,
     `email`      varchar(100) NOT NULL,
     `enable`     tinyint(1) DEFAULT '1',
-    `type`       int DEFAULT '1',
+    `type`       int DEFAULT '0',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `score`      int DEFAULT '0',
@@ -131,30 +137,30 @@ LOCK
 TABLES `frontend_user` WRITE;
 /*!40000 ALTER TABLE `frontend_user` DISABLE KEYS */;
 INSERT INTO `frontend_user`
-VALUES (1, 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin@example.com', 0, 1,
-        '2024-05-14 10:26:22', '2024-05-15 13:25:32', 0),
+VALUES (1, 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin@example.com', 0, 0,
+        '2024-05-14 10:26:22', '2024-05-17 09:32:53', 0),
        (4, 'John', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'john.doe@example.com', 0, 0,
-        '2024-05-14 16:20:25', '2024-05-15 12:43:36', 0),
-       (5, 'John1', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'john.doe1@example.com', 1, 1,
-        '2024-05-15 13:24:29', '2024-05-15 13:25:32', 0),
-       (6, 'John2', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'john.doe2@example.com', 1, 0,
-        '2024-05-15 13:24:35', '2024-05-15 13:24:35', 0),
-       (7, 'John3', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'john.doe3@example.com', 1, 1,
-        '2024-05-15 13:24:41', '2024-05-15 13:25:32', 0),
-       (8, 'TestUser1', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test@example.com', 0, 0,
-        '2024-05-15 13:30:06', '2024-05-15 13:59:45', 0),
-       (14, 'TestUser2', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test1@example.com', 0, 0,
-        '2024-05-15 13:38:40', '2024-05-15 13:59:46', 0),
-       (15, 'TestUser3', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test2@example.com', 1, 0,
-        '2024-05-15 13:38:50', '2024-05-15 13:38:50', 0),
-       (16, 'TestUser4', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test4@example.com', 1, 0,
-        '2024-05-15 13:38:55', '2024-05-15 13:38:55', 0),
-       (17, 'TestUser5', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test5@example.com', 1, 0,
-        '2024-05-15 13:39:00', '2024-05-15 13:39:00', 0),
-       (18, 'TestUser6', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test6@example.com', 1, 0,
-        '2024-05-15 13:39:05', '2024-05-15 13:39:05', 0),
-       (19, 'TestUser7', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test7@example.com', 1, 0,
-        '2024-05-15 13:39:44', '2024-05-15 13:39:44', 0);
+        '2024-05-14 16:20:25', '2024-05-17 09:34:56', 0),
+       (5, 'John1', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'john.doe1@example.com', 1, 0,
+        '2024-05-15 13:24:29', '2024-05-17 09:37:35', 0),
+       (6, 'John2', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'john.doe2@example.com', 1, 1,
+        '2024-05-15 13:24:35', '2024-05-17 09:37:32', 0),
+       (7, 'John3', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'john.doe3@example.com', 1, 0,
+        '2024-05-15 13:24:41', '2024-05-17 09:37:34', 0),
+       (8, 'TestUser1', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test@example.com', 1, 0,
+        '2024-05-15 13:30:06', '2024-05-17 09:37:33', 0),
+       (14, 'TestUser2', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test1@example.com', 1, 1,
+        '2024-05-15 13:38:40', '2024-05-17 09:35:22', 0),
+       (15, 'TestUser3', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test2@example.com', 0, 0,
+        '2024-05-15 13:38:50', '2024-05-17 09:35:23', 0),
+       (16, 'TestUser4', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test4@example.com', 0, 1,
+        '2024-05-15 13:38:55', '2024-05-17 09:35:21', 0),
+       (17, 'TestUser5', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test5@example.com', 1, 1,
+        '2024-05-15 13:39:00', '2024-05-17 09:35:12', 0),
+       (18, 'TestUser6', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test6@example.com', 1, 1,
+        '2024-05-15 13:39:05', '2024-05-17 09:32:33', 0),
+       (19, 'TestUser7', '008c70392e3abfbd0fa47bbc2ed96aa99bd49e159727fcba0f2e6abeb3a9d601', 'test7@example.com', 0, 0,
+        '2024-05-15 13:39:44', '2024-05-15 14:45:38', 0);
 /*!40000 ALTER TABLE `frontend_user` ENABLE KEYS */;
 UNLOCK
 TABLES;
@@ -172,21 +178,21 @@ CREATE TABLE `permission`
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `parentId`    int                                                           DEFAULT NULL,
-  `path`        varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `redirect`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `icon`        varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `component`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `layout`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `keepAlive`   tinyint                                                       DEFAULT NULL,
-  `method`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `parentId`  int                                                           DEFAULT NULL,
+  `path`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `redirect`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `icon`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `layout`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `keepAlive` tinyint                                                       DEFAULT NULL,
+  `method`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `show`        tinyint NOT NULL                                              DEFAULT '1' COMMENT '是否展示在页面菜单',
-  `enable`      tinyint NOT NULL                                              DEFAULT '1',
-  `order`       int                                                           DEFAULT NULL,
+  `show`      tinyint NOT NULL                                              DEFAULT '1' COMMENT '是否展示在页面菜单',
+  `enable`    tinyint NOT NULL                                              DEFAULT '1',
+  `order`     int                                                           DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `IDX_30e166e8c6359970755c5727a2` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -199,19 +205,19 @@ TABLES `permission` WRITE;
 INSERT INTO `permission`
 VALUES (1, '资源管理', 'Resource_Mgt', 'MENU', 2, '/pms/resource', NULL, 'i-fe:list',
         '/src/views/pms/resource/index.vue', NULL, NULL, NULL, NULL, 1, 1, 1),
-       (2, '系统管理', 'SysMgt', 'MENU', NULL, NULL, NULL, 'i-fe:grid', NULL, NULL, NULL, NULL, NULL, 1, 1, 2),
+       (2, '系统管理', 'SysMgt', 'MENU', NULL, NULL, NULL, 'i-fe:grid', NULL, NULL, NULL, NULL, NULL, 1, 1, 300),
        (3, '角色管理', 'RoleMgt', 'MENU', 2, '/pms/role', NULL, 'i-fe:user-check', '/src/views/pms/role/index.vue',
         NULL, NULL, NULL, NULL, 1, 1, 2),
        (4, '用户管理', 'UserMgt', 'MENU', 2, '/pms/user', NULL, 'i-fe:user', '/src/views/pms/user/index.vue', NULL, 1,
         NULL, NULL, 1, 1, 3),
        (5, '分配用户', 'RoleUser', 'MENU', 3, '/pms/role/user/:roleId', NULL, 'i-fe:user-plus',
         '/src/views/pms/role/role-user.vue', 'full', NULL, NULL, NULL, 0, 1, 1),
-       (6, '业务示例', 'Demo', 'MENU', NULL, NULL, NULL, 'i-fe:grid', NULL, NULL, NULL, NULL, NULL, 1, 0, 1),
+       (6, '业务示例', 'Demo', 'MENU', NULL, NULL, NULL, 'i-fe:grid', NULL, NULL, NULL, NULL, NULL, 1, 0, 500),
        (7, '图片上传', 'ImgUpload', 'MENU', 6, '/demo/upload', NULL, 'i-fe:image', '/src/views/demo/upload/index.vue',
         '', 1, NULL, NULL, 1, 1, 2),
        (8, '个人资料', 'UserProfile', 'MENU', NULL, '/profile', NULL, 'i-fe:user', '/src/views/profile/index.vue', NULL,
         NULL, NULL, NULL, 0, 1, 99),
-       (9, '基础功能', 'Base', 'MENU', NULL, '', NULL, 'i-fe:grid', NULL, '', NULL, NULL, NULL, 1, 1, 0),
+       (9, '基础功能', 'Base', 'MENU', NULL, '', NULL, 'i-fe:grid', NULL, '', NULL, NULL, NULL, 1, 1, 400),
        (10, '基础组件', 'BaseComponents', 'MENU', 9, '/base/components', NULL, 'i-me:awesome',
         '/src/views/base/index.vue', NULL, NULL, NULL, NULL, 1, 1, 1),
        (11, 'Unocss', 'Unocss', 'MENU', 9, '/base/unocss', NULL, 'i-me:awesome', '/src/views/base/unocss.vue', NULL,
@@ -223,12 +229,23 @@ VALUES (1, '资源管理', 'Resource_Mgt', 'MENU', 2, '/pms/resource', NULL, 'i-
         NULL, NULL, NULL, 1, 1, 0),
        (15, 'MeModal', 'TestModal', 'MENU', 9, '/testModal', NULL, 'i-me:dialog', '/src/views/base/test-modal.vue',
         NULL, NULL, NULL, NULL, 1, 1, 5),
-       (21, '前台用户管理', 'User', 'MENU', NULL, '', NULL, 'i-fe:user', '/src/views/user/list/index.vue', '', 1, NULL,
-        NULL, 1, 1, 1),
-       (25, '用户列表', 'List', 'MENU', 21, '/user/list', NULL, 'i-fe:users', '/src/views/user/list/index.vue', '',
-        NULL, NULL, NULL, 1, 1, 1),
+       (21, '前台用户管理', 'User', 'MENU', NULL, '', NULL, 'i-fe:user', '/src/views/user/list/index.vue', '', 0, NULL,
+        NULL, 1, 1, 100),
+       (25, '用户列表', 'List', 'MENU', 21, '/user/list', NULL, 'i-fe:users', '/src/views/user/list/index.vue', '', 1,
+        NULL, NULL, 1, 1, 1),
        (26, '预约列表', 'UserBooking', 'MENU', 21, '/user/booking', NULL, 'i-fe:feather',
-        '/src/views/user/booking/index.vue', '', NULL, NULL, NULL, 1, 1, 2);
+        '/src/views/user/booking/index.vue', '', 1, NULL, NULL, 1, 1, 2),
+       (27, 'DIY分享交流管理', 'DiyShare', 'MENU', NULL, NULL, NULL, 'i-fe:twitch', NULL, '', NULL, NULL, NULL, 1, 1,
+        200),
+       (28, '帖子列表', 'Post', 'MENU', 27, '/diy-share/post', NULL, 'i-fe:book-open',
+        '/src/views/diy-share/post/index.vue', '', 1, NULL, NULL, 1, 1, 0),
+       (29, '评论列表', 'Comment', 'MENU', 27, '/diy-share/comment', NULL, 'i-fe:message-circle',
+        '/src/views/diy-share/comment/index.vue', '', 1, NULL, NULL, 1, 1, 1),
+       (30, '首页', 'Home', 'MENU', NULL, '/', NULL, 'i-fe:airplay', '/src/views/home/index.vue', '', NULL, NULL, NULL,
+        1, 1, -100),
+       (31, '动态管理', 'News', 'MENU', NULL, '/news', NULL, 'i-fe:command', '/src/views/news/index.vue', '', 1, NULL,
+        NULL, 1, 1, 101),
+       (32, '增加新闻', 'AddNews', 'BUTTON', 31, NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, 1, 1, NULL);
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK
 TABLES;
@@ -247,7 +264,7 @@ CREATE TABLE `posts`
     `content`    text         NOT NULL,
     `author_id`  int          NOT NULL,
     `tags`       varchar(255) DEFAULT NULL,
-    `status`     enum('pending','approved','rejected') DEFAULT 'pending',
+    `status`     int          DEFAULT '3',
     `views`      int          DEFAULT '0',
     `likes`      int          DEFAULT '0',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -266,10 +283,10 @@ LOCK
 TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
 INSERT INTO `posts`
-VALUES (1, 'Getting started with VueJS', 'This is a post about VueJS...', 1, 'VueJS,JavaScript', 'pending', 0, 0,
+VALUES (1, 'Getting started with VueJS', 'This is a post about VueJS...', 1, 'VueJS,JavaScript', 1, 0, 0,
         '2024-05-14 10:26:22', '2024-05-14 10:26:22'),
-       (2, 'Building a REST API with SpringBoot', 'This is a post about SpringBoot...', 1, 'SpringBoot', 'pending', 0,
-        0, '2024-05-14 10:26:22', '2024-05-14 10:26:22');
+       (2, 'Building a REST API with SpringBoot', 'This is a post about SpringBoot...', 8, 'SpringBoot', 1, 0, 0,
+        '2024-05-14 10:26:22', '2024-05-17 02:29:16');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK
 TABLES;
@@ -358,7 +375,7 @@ CREATE TABLE `role_permissions_permission`
   PRIMARY KEY (`id`) USING BTREE,
   KEY `IDX_b36cb2e04bc353ca4ede00d87b` (`roleId`) USING BTREE,
   KEY `IDX_bfbc9e263d4cea6d7a8c9eb3ad` (`permissionId`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -369,17 +386,18 @@ LOCK
 TABLES `role_permissions_permission` WRITE;
 /*!40000 ALTER TABLE `role_permissions_permission` DISABLE KEYS */;
 INSERT INTO `role_permissions_permission`
-VALUES (2, 7, 32),
-       (2, 12, 33),
-       (2, 9, 34),
-       (2, 14, 35),
-       (2, 10, 36),
-       (2, 11, 37),
-       (2, 15, 38),
-       (2, 21, 39),
-       (2, 25, 40),
-       (2, 26, 41),
-       (2, 8, 42);
+VALUES (2, 7, 43),
+       (2, 12, 44),
+       (2, 9, 45),
+       (2, 14, 46),
+       (2, 10, 47),
+       (2, 11, 48),
+       (2, 15, 49),
+       (2, 21, 50),
+       (2, 25, 51),
+       (2, 26, 52),
+       (2, 8, 53),
+       (2, 6, 54);
 /*!40000 ALTER TABLE `role_permissions_permission` ENABLE KEYS */;
 UNLOCK
 TABLES;
@@ -449,6 +467,70 @@ UNLOCK
 TABLES;
 
 --
+-- Table structure for table `tb_news`
+--
+
+DROP TABLE IF EXISTS `tb_news`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_news`
+(
+    `id`         int      NOT NULL AUTO_INCREMENT,
+    `title`      varchar(255)      DEFAULT NULL,
+    `content`    text,
+    `author`     varchar(255)      DEFAULT NULL,
+    `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `image_url`  varchar(255)      DEFAULT NULL,
+    `status`     int               DEFAULT '0',
+    PRIMARY KEY (`id`),
+    KEY          `tb_news_user_id_fk` (`author`),
+    KEY          `tb_news_created_at_index` (`created_at`),
+    KEY          `tb_news_status_index` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_news`
+--
+
+LOCK
+TABLES `tb_news` WRITE;
+/*!40000 ALTER TABLE `tb_news` DISABLE KEYS */;
+INSERT INTO `tb_news`
+VALUES (1, '三星堆遗址的发现与意义',
+        '三星堆是中国古代文明的重要遗址之一，其发现对于研究古代文明、人类起源和文化交流具有重要意义。', '张三',
+        '2023-04-12 09:00:00', 'http://localhost:8080/img/7e2c3182-78da-4a29-927c-443b121d771f.jpg', 0),
+       (2, '三星堆文明的特点与成就',
+        '三星堆文明以青铜器制作工艺和玉器雕刻工艺闻名于世，展现了古代巴蜀人民的智慧和技术水平。', '李四',
+        '2023-04-13 10:30:00', '', 1),
+       (3, '三星堆青铜神树的神秘之处', '三星堆青铜神树是古代巴蜀文明的重要象征之一，其神秘的图案和含义引人深思。', '王五',
+        '2023-04-14 11:45:00', '', 2),
+       (4, '三星堆遗址的考古发现',
+        '近年来，对三星堆遗址的考古发掘工作取得了重要进展，发现了大量珍贵文物和遗迹，为研究古代文明提供了重要资料。',
+        '赵六', '2023-04-15 13:00:00', '', 0),
+       (5, '三星堆文化的传承与发展',
+        '三星堆文化是中国古代文明的重要组成部分，其在艺术、宗教、政治等方面的影响持续至今，对于当代文化传承与发展具有重要意义。',
+        '钱七', '2023-04-16 14:20:00', '', 1),
+       (6, '三星堆遗址保护与管理',
+        '为了保护三星堆遗址和相关文物，加强遗址保护工作和管理至关重要，需要政府、学界和社会各界的共同努力。', '孙八',
+        '2023-04-17 15:40:00', '', 0),
+       (7, '三星堆文物的特色与魅力',
+        '三星堆文物以其独特的艺术风格、精美的工艺和丰富的历史内涵，吸引着大量游客和学者前来参观和研究。', '周九',
+        '2023-04-18 16:55:00', '', 2),
+       (8, '三星堆遗址的保护与利用',
+        '三星堆遗址的保护和利用是一个重要课题，需要综合考虑文物保护、旅游开发、科研教育等多方面因素，实现保护和利用的双赢。',
+        '吴十', '2023-04-19 17:30:00', '', 1),
+       (9, '三星堆文明与世界文化',
+        '三星堆文明作为中国古代文明的重要组成部分，对世界文化产生了重要影响，是世界文化遗产的重要组成部分。', '李白',
+        '2023-04-20 18:15:00', 'http://localhost:8080/img/7e2c3182-78da-4a29-927c-443b121d771f.jpg', 2),
+       (10, '三星堆文化遗产的保护与传承',
+        '为了保护和传承三星堆文化遗产，需要加强对遗址和文物的保护工作，开展相关研究和教育，推动文化传承和创新发展。',
+        '杜甫', '2023-04-21 19:00:00', 'http://localhost:8080/img/c6626feb-966e-4c03-b3d1-b8db629024b5.png', 1);
+/*!40000 ALTER TABLE `tb_news` ENABLE KEYS */;
+UNLOCK
+TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -478,8 +560,8 @@ TABLES `user` WRITE;
 INSERT INTO `user`
 VALUES (1, 'admin', '$2a$10$mStlKYfFw.U54E5IXKLfv.Fe0DVaKSV.FwaybfJJrKRMu0kXmPK8O', 1, '2024-05-15 14:59:21.762675',
         '2024-05-15 14:59:21.762675'),
-       (3, '123456', '$2a$10$7LelK5qwaJdEeDnD4LvR9eiF73Anf9tbRVFKV8OFnn2ZczyqO8NOq', 1, '2024-05-15 15:04:31.666849',
-        '2024-05-15 15:04:31.666849');
+       (3, '123456', '$2a$10$7LelK5qwaJdEeDnD4LvR9eiF73Anf9tbRVFKV8OFnn2ZczyqO8NOq', 1, '2024-05-16 16:00:58.477514',
+        '2024-05-16 16:00:58.477514');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK
 TABLES;
@@ -499,7 +581,7 @@ CREATE TABLE `user_roles_role`
   PRIMARY KEY (`id`) USING BTREE,
   KEY `IDX_5f9286e6c25594c6b88c108db7` (`userId`) USING BTREE,
   KEY `IDX_4be2f7adf862634f5f803d246b` (`roleId`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -512,7 +594,8 @@ TABLES `user_roles_role` WRITE;
 INSERT INTO `user_roles_role`
 VALUES (1, 1, 1),
        (1, 2, 2),
-       (3, 2, 11);
+       (3, 2, 12),
+       (3, 1, 13);
 /*!40000 ALTER TABLE `user_roles_role` ENABLE KEYS */;
 UNLOCK
 TABLES;
@@ -526,4 +609,4 @@ TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-15 22:11:44
+-- Dump completed on 2024-05-18 13:15:49
